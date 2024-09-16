@@ -27,7 +27,11 @@ classnames = [
         "cell phone", "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors",
         "teddy bear", "hair drier", "toothbrush","pen","pencil","book","chip","battery"
 ]
-def main():
+
+if not cap.isOpened():
+    print("Failed to open the IP camera stream")
+    exit()
+if st.button("Stream"):
     while True:
         img_resp = urllib.request.urlopen(cam1)
         img = np.array(bytearray(img_resp.read()), dtype=np.uint8)
@@ -47,14 +51,10 @@ def main():
 
         cam = cv.convertScaleAbs(cam,alpha=alpha, beta = beta)
         frame_place_holder.image(cam,channels='RGB')
-if not cap.isOpened():
-    print("Failed to open the IP camera stream")
-    exit()
-if st.button("Stream"):
-    main()
 elif st.button("Stop"):
     while True:
         img_resp = urllib.request.urlopen(cam1)
         img = np.array(bytearray(img_resp.read()), dtype=np.uint8)
         cam = cv.imdecode(img, -1)
         result = model(cam,stream=False)
+        break
